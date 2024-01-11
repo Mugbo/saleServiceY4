@@ -2,6 +2,7 @@ package ie.saleservice;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -11,6 +12,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class OrderDetails {
     @NotBlank(message = "Product type must not be blank")
+    @Size(min = 0, max = 10, message = "Product type must be between 0 and 10")
     private String productType;
 
     @Positive(message = "Quantity must be a positive integer")
