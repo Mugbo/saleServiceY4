@@ -1,5 +1,6 @@
 package ie.saleservice;
 
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,7 +15,7 @@ public class SaleService {
         this.customerServiceClient = customerServiceClient;
     }
 
-    public SalesOrder createOrder(Customer customer, OrderDetails orderDetails) {
+    public SalesOrder createOrder(@Valid Customer customer, @Valid OrderDetails orderDetails) {
         double productPrice = orderServiceClient.calculatePrice(orderDetails);
 
         DeliveryInfo deliveryInfo = customerServiceClient.calculateDelivery(customer);
