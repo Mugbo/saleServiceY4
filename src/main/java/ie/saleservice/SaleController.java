@@ -16,6 +16,7 @@ public class SaleController {
     private final SalesOrderRepo salesOrderRepo;
 
 
+
     @Autowired
     public SaleController(SaleService saleService, SalesOrderRepo salesOrderRepo) {
         this.saleService = saleService;

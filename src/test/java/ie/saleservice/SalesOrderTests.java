@@ -15,12 +15,13 @@ public class SalesOrderTests {
     @Test
     public void testValidSalesOrder(){
         SalesOrder salesOrder = new SalesOrder();
-        salesOrder.setProductType("shoes");
+        salesOrder.setProductType("Shoes");
         salesOrder.setDeliveryPrice(20);
         salesOrder.setQuantity(12);
         salesOrder.setTotalPrice(120);
         salesOrder.setProductPrice(22);
         salesOrder.setDeliveryTime(10);
+        salesOrder.setRegion("US");
 
         assertTrue(validator.validate(salesOrder).isEmpty());
     }
@@ -33,6 +34,6 @@ public class SalesOrderTests {
         salesOrder.setProductPrice(-1);
         salesOrder.setDeliveryTime(-1);
 
-        assertEquals(6,validator.validate(salesOrder).size());
+        assertEquals(7,validator.validate(salesOrder).size());
     }
 }

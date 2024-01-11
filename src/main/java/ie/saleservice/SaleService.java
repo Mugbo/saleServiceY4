@@ -12,6 +12,7 @@ public class SaleService {
 
     private final SalesOrderRepo salesOrderRepo;
 
+
     @Autowired
     public SaleService(OrderServiceClient orderServiceClient, CustomerServiceClient customerServiceClient, SalesOrderRepo salesOrderRepo) {
         this.orderServiceClient = orderServiceClient;
@@ -19,19 +20,20 @@ public class SaleService {
         this.salesOrderRepo = salesOrderRepo;
     }
 
-    @Transactional
     public SalesOrder createOrder(@Valid Customer customer, @Valid OrderDetails orderDetails) {
+
+        SalesOrder salesOrder = new SalesOrder();
         double productPrice = orderServiceClient.calculatePrice(orderDetails);
 
         DeliveryInfo deliveryInfo = customerServiceClient.calculateDelivery(customer);
 
-        SalesOrder salesOrder = new SalesOrder();
         salesOrder.setProductType(orderDetails.getProductType());
         salesOrder.setQuantity(orderDetails.getQuantity());
         salesOrder.setProductPrice(productPrice);
         salesOrder.setDeliveryTime(deliveryInfo.getDeliveryTime());
         salesOrder.setDeliveryPrice(deliveryInfo.getDeliveryPrice());
         salesOrder.setTotalPrice(productPrice + deliveryInfo.getDeliveryPrice());
+        salesOrder.setRegion(customer.getRegion());
 
         return salesOrder;
     }
