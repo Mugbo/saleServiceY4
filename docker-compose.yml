@@ -1,0 +1,20 @@
+VERSION '3.8'
+
+services:
+  customer-service:
+    image:
+    ports:
+    - "8080:8080"
+    networks:
+      - my_network
+
+  order-service:
+    image:
+    ports:
+      - "8083:8083"
+    networks:
+      - my_network
+
+networks:
+  my_network:
+    driver: bridge

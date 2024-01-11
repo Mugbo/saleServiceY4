@@ -1,5 +1,6 @@
 package ie.saleservice;
 
+import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -9,12 +10,16 @@ public class SaleService {
     private final OrderServiceClient orderServiceClient;
     private final CustomerServiceClient customerServiceClient;
 
+    private final SalesOrderRepo salesOrderRepo;
+
     @Autowired
-    public SaleService(OrderServiceClient orderServiceClient, CustomerServiceClient customerServiceClient) {
+    public SaleService(OrderServiceClient orderServiceClient, CustomerServiceClient customerServiceClient, SalesOrderRepo salesOrderRepo) {
         this.orderServiceClient = orderServiceClient;
         this.customerServiceClient = customerServiceClient;
+        this.salesOrderRepo = salesOrderRepo;
     }
 
+    @Transactional
     public SalesOrder createOrder(@Valid Customer customer, @Valid OrderDetails orderDetails) {
         double productPrice = orderServiceClient.calculatePrice(orderDetails);
 
@@ -29,5 +34,10 @@ public class SaleService {
         salesOrder.setTotalPrice(productPrice + deliveryInfo.getDeliveryPrice());
 
         return salesOrder;
+    }
+
+    @Transactional
+    public void saveSalesOrder(SalesOrder salesOrder){
+        salesOrderRepo.save(salesOrder);
     }
 }
