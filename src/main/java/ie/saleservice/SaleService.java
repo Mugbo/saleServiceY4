@@ -5,22 +5,27 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class SaleService {
+    private final OrderServiceClient orderServiceClient;
+    private final CustomerServiceClient customerServiceClient;
+
     @Autowired
-    private OrderServiceClient orderServiceClient;
-    private CustomerServiceClient customerServiceClient;
+    public SaleService(OrderServiceClient orderServiceClient, CustomerServiceClient customerServiceClient) {
+        this.orderServiceClient = orderServiceClient;
+        this.customerServiceClient = customerServiceClient;
+    }
 
-    public SalesOrder createSalesOrder(OrderDetails orderDetails, Customer customer) {
-        double productPrice = orderDetails.calculateProductPrice(orderDetails);
-        DeliveryInfo deliveryInfo = deliveryServiceClient.calculateDeliveryInfo(customerLocation);
+    public SalesOrder createOrder(Customer customer, OrderDetails orderDetails) {
+        double productPrice = orderServiceClient.calculatePrice(orderDetails);
 
-        // Assuming a simple sales order creation logic
+        DeliveryInfo deliveryInfo = customerServiceClient.calculateDelivery(customer);
+
         SalesOrder salesOrder = new SalesOrder();
-        salesOrder.setProductType(productVariable.getProductType());
-        salesOrder.setQuantity(productVariable.getQuantity());
+        salesOrder.setProductType(orderDetails.getProductType());
+        salesOrder.setQuantity(orderDetails.getQuantity());
         salesOrder.setProductPrice(productPrice);
         salesOrder.setDeliveryTime(deliveryInfo.getDeliveryTime());
         salesOrder.setDeliveryPrice(deliveryInfo.getDeliveryPrice());
-        salesOrder.calculateTotalPrice(); // Assuming a method to calculate total price
+        salesOrder.setTotalPrice(productPrice + deliveryInfo.getDeliveryPrice());
 
         return salesOrder;
     }
